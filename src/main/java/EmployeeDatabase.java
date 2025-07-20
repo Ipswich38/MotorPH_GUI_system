@@ -33,12 +33,12 @@ public class EmployeeDatabase {
     public static final int ATT_LOG_IN = 4;
     public static final int ATT_LOG_OUT = 5;
 
-    // Get all employees
+    // Get all employees - delegates to CSV reader
     public static List<String[]> getAllEmployees() {
         return EmployeeCSVReader.readEmployeeDetails();
     }
 
-    // Get one employee by their number
+    // Get one employee by their number - delegates to CSV reader
     public static String[] getEmployeeByNumber(String employeeNumber) {
         return EmployeeCSVReader.getEmployeeByNumber(employeeNumber);
     }
@@ -51,12 +51,14 @@ public class EmployeeDatabase {
 
         for (int i = 0; i < allEmployees.size(); i++) {
             String[] employee = allEmployees.get(i);
-            String firstName = employee[FIRST_NAME].toLowerCase();
-            String lastName = employee[LAST_NAME].toLowerCase();
-            String fullName = firstName + " " + lastName;
+            if (employee.length >= 3) {
+                String firstName = employee[FIRST_NAME].toLowerCase();
+                String lastName = employee[LAST_NAME].toLowerCase();
+                String fullName = firstName + " " + lastName;
 
-            if (firstName.contains(searchName) || lastName.contains(searchName) || fullName.contains(searchName)) {
-                results.add(employee);
+                if (firstName.contains(searchName) || lastName.contains(searchName) || fullName.contains(searchName)) {
+                    results.add(employee);
+                }
             }
         }
 
@@ -71,16 +73,18 @@ public class EmployeeDatabase {
 
         for (int i = 0; i < allEmployees.size(); i++) {
             String[] employee = allEmployees.get(i);
-            String empPosition = employee[POSITION].toLowerCase();
-            if (empPosition.contains(searchPos)) {
-                results.add(employee);
+            if (employee.length > POSITION) {
+                String empPosition = employee[POSITION].toLowerCase();
+                if (empPosition.contains(searchPos)) {
+                    results.add(employee);
+                }
             }
         }
 
         return results;
     }
 
-    // Add a new employee
+    // Add a new employee - delegates to CSV reader
     public static boolean addEmployee(String[] employeeData) {
         if (employeeData == null || employeeData.length < 19) {
             System.out.println("Employee data is not complete - need 19 fields");
@@ -97,27 +101,27 @@ public class EmployeeDatabase {
         return true;
     }
 
-    // Update an existing employee
+    // Update an existing employee - delegates to CSV reader
     public static boolean updateEmployee(String employeeNumber, String[] updatedData) {
         return EmployeeCSVReader.updateEmployee(employeeNumber, updatedData);
     }
 
-    // Delete an employee
+    // Delete an employee - delegates to CSV reader
     public static boolean deleteEmployee(String employeeNumber) {
         return EmployeeCSVReader.deleteEmployee(employeeNumber);
     }
 
-    // Count total employees
+    // Count total employees - delegates to CSV reader
     public static int getTotalEmployees() {
         return EmployeeCSVReader.getTotalEmployeeCount();
     }
 
-    // Get next employee number
+    // Get next employee number - delegates to CSV reader
     public static String generateNextEmployeeNumber() {
         return EmployeeCSVReader.generateNextEmployeeNumber();
     }
 
-    // Get data for the employee table (simplified)
+    // Get data for the employee table (for backward compatibility)
     public static Object[][] getAllEmployeesForTable() {
         List<String[]> employees = getAllEmployees();
         Object[][] data = new Object[employees.size()][7];
@@ -138,12 +142,17 @@ public class EmployeeDatabase {
         return data;
     }
 
-    // Get attendance for an employee
+    // Get basic employee info for dashboard - delegates to CSV reader
+    public static List<String[]> getAllEmployeesBasicInfo() {
+        return EmployeeCSVReader.getAllEmployeesBasicInfo();
+    }
+
+    // Get attendance for an employee - delegates to CSV reader
     public static List<String[]> getEmployeeAttendance(String employeeNumber) {
         return EmployeeCSVReader.getAttendanceByEmployeeNumber(employeeNumber);
     }
 
-    // Get attendance for an employee for a specific month
+    // Get attendance for an employee for a specific month - delegates to CSV reader
     public static List<String[]> getEmployeeAttendanceForMonth(String employeeNumber, String month, String year) {
         return EmployeeCSVReader.getAttendanceByEmployeeAndMonth(employeeNumber, month, year);
     }
@@ -165,7 +174,7 @@ public class EmployeeDatabase {
                         totalHours = totalHours + hours;
                     }
                 } catch (Exception e) {
-                    System.out.println("Error calculating hours for record");
+                    System.out.println("Error calculating hours for record: " + e.getMessage());
                 }
             }
         }
@@ -257,7 +266,7 @@ public class EmployeeDatabase {
             salaryDetails.put("netPay", netPay);
 
         } catch (Exception e) {
-            System.out.println("Error calculating salary for employee: " + employeeNumber);
+            System.out.println("Error calculating salary for employee: " + employeeNumber + " - " + e.getMessage());
         }
 
         return salaryDetails;
@@ -356,8 +365,8 @@ public class EmployeeDatabase {
         return newEmployee;
     }
 
-    // Refresh data (just calls the CSV reader again)
+    // Refresh data (delegates to CSV reader)
     public static void refreshData() {
-        System.out.println("Refreshing employee data...");
+        System.out.println("Refreshing employee data from CSV files...");
     }
 }

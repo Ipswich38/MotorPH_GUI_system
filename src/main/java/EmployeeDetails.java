@@ -71,9 +71,9 @@ public class EmployeeDetails extends JFrame {
             setTitle("Employee Details");
         }
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 800);
+        setSize(600, 500); // Reduced height
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true); // Allow resizing
     }
 
     // Create all components
@@ -127,9 +127,14 @@ public class EmployeeDetails extends JFrame {
         salaryDetailsArea.setText("Select month and year, then click 'Compute Salary' to view salary details.");
     }
 
-    // Arrange all components
+    // Arrange all components with scroll support
     private void arrangeComponents() {
-        setLayout(null);
+        setLayout(new BorderLayout());
+
+        // Create main content panel
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(null);
+        contentPanel.setPreferredSize(new Dimension(580, 700)); // Set preferred size for scrolling
 
         int y = 20;
 
@@ -137,127 +142,134 @@ public class EmployeeDetails extends JFrame {
         JLabel titleLabel = new JLabel("Employee Information");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setBounds(200, y, 200, 25);
-        add(titleLabel);
+        contentPanel.add(titleLabel);
         y += 40;
 
         // Employee details
         empNumberLabel.setBounds(50, y, 300, 25);
-        add(empNumberLabel);
+        contentPanel.add(empNumberLabel);
         y += 25;
 
         nameLabel.setBounds(50, y, 300, 25);
-        add(nameLabel);
+        contentPanel.add(nameLabel);
         y += 25;
 
         birthdayLabel.setBounds(50, y, 300, 25);
-        add(birthdayLabel);
+        contentPanel.add(birthdayLabel);
         y += 25;
 
         addressLabel.setBounds(50, y, 500, 25);
-        add(addressLabel);
+        contentPanel.add(addressLabel);
         y += 25;
 
         phoneLabel.setBounds(50, y, 300, 25);
-        add(phoneLabel);
+        contentPanel.add(phoneLabel);
         y += 25;
 
         sssLabel.setBounds(50, y, 300, 25);
-        add(sssLabel);
+        contentPanel.add(sssLabel);
         y += 25;
 
         philhealthLabel.setBounds(50, y, 300, 25);
-        add(philhealthLabel);
+        contentPanel.add(philhealthLabel);
         y += 25;
 
         tinLabel.setBounds(50, y, 300, 25);
-        add(tinLabel);
+        contentPanel.add(tinLabel);
         y += 25;
 
         pagibigLabel.setBounds(50, y, 300, 25);
-        add(pagibigLabel);
+        contentPanel.add(pagibigLabel);
         y += 25;
 
         statusLabel.setBounds(50, y, 300, 25);
-        add(statusLabel);
+        contentPanel.add(statusLabel);
         y += 25;
 
         positionLabel.setBounds(50, y, 300, 25);
-        add(positionLabel);
+        contentPanel.add(positionLabel);
         y += 25;
 
         supervisorLabel.setBounds(50, y, 300, 25);
-        add(supervisorLabel);
+        contentPanel.add(supervisorLabel);
         y += 30;
 
         // Salary information section
         JLabel salaryTitle = new JLabel("Salary Information");
         salaryTitle.setFont(new Font("Arial", Font.BOLD, 14));
         salaryTitle.setBounds(50, y, 200, 25);
-        add(salaryTitle);
+        contentPanel.add(salaryTitle);
         y += 30;
 
         basicSalaryLabel.setBounds(50, y, 250, 25);
-        add(basicSalaryLabel);
+        contentPanel.add(basicSalaryLabel);
         y += 25;
 
         riceSubsidyLabel.setBounds(50, y, 250, 25);
-        add(riceSubsidyLabel);
+        contentPanel.add(riceSubsidyLabel);
         y += 25;
 
         phoneAllowanceLabel.setBounds(50, y, 250, 25);
-        add(phoneAllowanceLabel);
+        contentPanel.add(phoneAllowanceLabel);
         y += 25;
 
         clothingAllowanceLabel.setBounds(50, y, 250, 25);
-        add(clothingAllowanceLabel);
+        contentPanel.add(clothingAllowanceLabel);
         y += 25;
 
         grossSemiMonthlyLabel.setBounds(50, y, 250, 25);
-        add(grossSemiMonthlyLabel);
+        contentPanel.add(grossSemiMonthlyLabel);
         y += 25;
 
         hourlyRateLabel.setBounds(50, y, 250, 25);
-        add(hourlyRateLabel);
+        contentPanel.add(hourlyRateLabel);
         y += 40;
 
         // Salary computation section
         JLabel computeTitle = new JLabel("Compute Monthly Salary");
         computeTitle.setFont(new Font("Arial", Font.BOLD, 14));
         computeTitle.setBounds(50, y, 200, 25);
-        add(computeTitle);
+        contentPanel.add(computeTitle);
         y += 30;
 
         JLabel monthLabel = new JLabel("Month:");
         monthLabel.setBounds(50, y, 80, 25);
-        add(monthLabel);
+        contentPanel.add(monthLabel);
         monthBox.setBounds(130, y, 80, 25);
-        add(monthBox);
+        contentPanel.add(monthBox);
 
         JLabel yearLabel = new JLabel("Year:");
         yearLabel.setBounds(220, y, 50, 25);
-        add(yearLabel);
+        contentPanel.add(yearLabel);
         yearBox.setBounds(270, y, 80, 25);
-        add(yearBox);
+        contentPanel.add(yearBox);
 
         computeButton.setBounds(360, y, 120, 25);
-        add(computeButton);
+        contentPanel.add(computeButton);
         y += 40;
 
         // Salary details area
         JLabel detailsTitle = new JLabel("Salary Computation Details");
         detailsTitle.setFont(new Font("Arial", Font.BOLD, 14));
         detailsTitle.setBounds(50, y, 200, 25);
-        add(detailsTitle);
+        contentPanel.add(detailsTitle);
         y += 30;
 
         JScrollPane scrollPane = new JScrollPane(salaryDetailsArea);
-        scrollPane.setBounds(50, y, 500, 200);
-        add(scrollPane);
-        y += 220;
+        scrollPane.setBounds(50, y, 500, 150); // Smaller height
+        contentPanel.add(scrollPane);
+        y += 170;
 
         // Close button
         closeButton.setBounds(250, y, 100, 30);
-        add(closeButton);
+        contentPanel.add(closeButton);
+
+        // Add content panel to a scroll pane
+        JScrollPane mainScrollPane = new JScrollPane(contentPanel);
+        mainScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        add(mainScrollPane, BorderLayout.CENTER);
     }
 
     // Add button actions
